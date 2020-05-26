@@ -1,0 +1,8 @@
+pynsq
+gnsq
+requests
+lxml
+ndjson
+kafka
+pymysql
+watchdog
