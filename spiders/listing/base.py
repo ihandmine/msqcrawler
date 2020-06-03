@@ -110,7 +110,7 @@ class ListingSpiderBase(Spider, ABC):
         return ''.join([i.strip() for i in self.response.xpath(".//*[@id='wayfinding-breadcrumbs_feature_div']/ul//text()").extract()])
 
     def get_product_node(self):
-        return ''.join(re.findall(r'node=(\d+)'
+        return ''.join(re.findall(r'node=(\d+)', 
                                   ''.join(
             self.response.xpath('//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[last()]//a/@href').extract())))
 
