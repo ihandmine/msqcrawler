@@ -58,16 +58,20 @@ class Response(object):
         self.response = response
         self.meta_source = meta
         self._text = ''
+        self._content = ''
         self.set_text()
         self.x_res = etree.HTML(self._text)
 
     def set_text(self):
         if isinstance(self.response, bytes):
             self._text = self.response.decode('utf-8')
+            self._content = self.response
         elif self.async_http:
             self._text = self.response.body.decode('utf-8')
+            self._content = self.response.body
         else:
             self._text = self.response.text
+            self._content = self.response.content
 
     def regex(self, pattern, text=None, flags=0):
         if text:
@@ -89,7 +93,7 @@ class Response(object):
 
     @property
     def body(self):
-        return self.response.content
+        return self._content
 
     def json(self):
         return self.response.json()

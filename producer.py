@@ -82,7 +82,6 @@ class AnswerHandler(BaseHandler):
 
 
 class ListingHandler(BaseHandler):
-    @property
     def get(self):
         """
         msg = '{"spider": "local_spider", "topic": "qiushispider", "url": "http://192.168.5.222:9501/", "meta": {}}'.encode('utf-8')
@@ -114,6 +113,7 @@ class ListingHandler(BaseHandler):
         if "asin" in self.request.arguments:
             asin = self.get_argument('asin')
             msg = struct_msg(asin)
+            print(msg)
             callback = functools.partial(self.finish_pub, topic=topic, msg=msg)
             self.nsq.pub(topic, msg, callback=callback)
             self.write(msg)

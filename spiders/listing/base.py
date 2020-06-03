@@ -213,7 +213,7 @@ class ListingSpiderBase(Spider, ABC):
         return item
 
     def get_customer_reviews_count(self):
-        return ''.join(''.join(self.response.xpath(".//*[@id='acrCustomerReviewText']/text()").extract()).strip().split()[:1]).replace(',', '')
+        return ''.join(''.join(self.response.xpath(".//*[@id='acrCustomerReviewText']/text()").extract()[:1]).strip().split()[:-1]).replace(',', '')
 
     def get_ask(self):
         return ''.join(re.findall(r'\d+', ''.join(
