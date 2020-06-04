@@ -27,7 +27,7 @@ class AsyncRequest(object):
 
     def fetch(self, callback=None):
         callback = functools.partial(callback)
-        return self.http_client.fetch(self.request, callback=callback)
+        return self.http_client.fetch(self.request, callback=callback, raise_error=False)
 
     @classmethod
     def request(cls, url):

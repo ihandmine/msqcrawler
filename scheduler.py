@@ -5,14 +5,18 @@ import tornado.ioloop
 from tornado import gen
 
 from pool import Thread, ThreadPoolExecutorDefine
-from dequeue.nsq_dequeue import Dequeue as nsq_queue
-from dequeue.redis_dequeue import Dequeue as redis_queue
+from dequeue.nsq_dequeue import Dequeue as Nsq_queue
+from dequeue.redis_dequeue import Dequeue as Redis_queue
 from kafka_data import KafkaData
 from engine import Engine
 from producer import Publisher
 from utils.misc import get_settings
 from utils.watchdog import start_observer, load_filter_spider
 from spider import FollowRequest
+from utils.log import logging
+
+
+logger = logging.get_logger('scheduler')
 
 
 class Scheduler(object):
@@ -25,9 +29,9 @@ class Scheduler(object):
     def __init__(self):
         self.spiders = {}
         if self.settings['USE_REDIS']:
-            self.dequeue = redis_queue.start_listen
+            self.dequeue = Redis_queue.start_listen
         else:
-            self.dequeue = nsq_queue.start_listen
+            self.dequeue = Nsq_queue.start_listen
         self.kafka = KafkaData(self.settings)
         self.engine = Engine
         self.topic = self.settings["NSQ_TOPIC"]
@@ -82,9 +86,8 @@ class Scheduler(object):
         meta = message_parse['meta']
         callfunc = "parse"
 
-        spider_iter = self.spiders[message_parse['spider']]
-
         try:
+            spider_iter = self.spiders[message_parse['spider']]
             engine = self.engine()
             if engine.async_settings and engine.async_method == "tornado":
                 return engine.runtime(url, spider_iter, meta, callfunc, callback=self.runner)
@@ -113,13 +116,12 @@ class Scheduler(object):
             del engine
         except Exception as e:
             Publisher().start(self.topic, message)
-            print('process_spider_item: ', e)
+            logger.error(e)
 
     def runner(self, parse, spider_iter):
         for item in parse():
             if not isinstance(item, FollowRequest):
                 self.kafka.single_data_handler([self.target_topic, item])
-                print('item: ', item)
             else:
                 url, meta, spider_name = item
                 message = self.settings['MESSAGE_MODEL'] % {
@@ -129,6 +131,7 @@ class Scheduler(object):
                     'meta': json.dumps(meta)
                 }
                 Publisher().start(self.topic, message)
+                logger.info('url: %s enqueue nsq successfully' % url)
 
 
 if __name__ == "__main__":

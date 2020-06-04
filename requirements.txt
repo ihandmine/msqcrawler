@@ -1,8 +1,11 @@
 pynsq
+tornado
 gnsq
 requests
 lxml
 ndjson
-kafka
+kafka-python
 pymysql
 watchdog
+aiohttp
+loguru

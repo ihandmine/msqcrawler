@@ -2,9 +2,40 @@ import requests
 import asyncio
 import aiohttp
 
-from yarl import URL
+# from yarl import URL
+#
+# import defaults as settings
 
-import defaults as settings
+from utils.log import logging
+
+
+def _test_log_func():
+    logger = logging.get_logger("test")
+    # logger.level("GOU", no=22, color="<yellow>", icon="✔️")
+    # logger.level("SNAKY", no=22, color="<yellow>", icon="🐍️   ")
+    # logger.log("GOU", "Here we go!")
+    # logger.log("SNAKY", "Here we go!")
+    logger.info('aaaaaaaa')
+    logger.error('aaaaaaaa')
+    logger.debug('aaaaaaaa')
+    logger.critical('aaaaaaaa')
+    logger.warning('aaaaaa')
+    logger.trace('aaaaaa')
+    logger.success('aaaaaa')
+
+
+def _test_source_log_func():
+    import logging
+    logging.INFO
+
+    logging.basicConfig(
+        level=logging.INFO,
+        # filename='./data/filesort.log',
+        # filemode='a',
+        format='%(asctime)s | %(levelname)s | %(message)s'
+    )
+    logger = logging.getLogger('test')
+    logger.info('bbbbbbbbbbbbb')
 
 
 def _test_session():
@@ -34,6 +65,7 @@ if __name__ == "__main__":
     # asyncio.run(response())
     # test_session()
     # _test_settings()
+    '''
     from multihttp.aio_request import AioRequest
 
     loop = asyncio.get_event_loop()
@@ -59,3 +91,7 @@ if __name__ == "__main__":
             print(item)
 
     loop.run_until_complete(task(hand_data))
+    '''
+
+    _test_log_func()
+    _test_source_log_func()

@@ -11,6 +11,7 @@ from spider import Spider
 class ListingSpiderBase(Spider, ABC):
     name = ''
     base_url = ''
+    logging_keys = ['asin', ]
 
     def parse(self):
         item = Item()

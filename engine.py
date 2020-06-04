@@ -2,6 +2,9 @@ from utils.misc import load_object, get_settings
 from multihttp.request import Request
 from multihttp.async_request import AsyncRequest
 from multihttp.aio_request import AioRequest
+from utils.log import logging
+
+logger = logging.get_logger('engine')
 
 
 class Engine(object):
@@ -63,6 +66,7 @@ class Engine(object):
             self.set_response(response)
             self.inject(period='end')
             parse = getattr(spider_iter(self.__response, meta), callfunc)
+            logger.success(logging.format(spider_iter, meta))
             callback(parse, spider_iter)
 
         self.request = AsyncRequest.request(url)
