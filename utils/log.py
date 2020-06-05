@@ -77,11 +77,12 @@ class LogFormatter(object):
 
     def format(self, spider, meta):
         if hasattr(spider, 'logging_keys'):
-            logging_txt = ''
+            logging_txt = []
             for key in spider.logging_keys:
                 if meta.get(key, None) is not None:
-                    logging_txt += u'{0}:{1} '.format(key, meta[key])
-            return logging_txt + ' successfully'
+                    logging_txt.append(u'{0}:{1} '.format(key, meta[key]))
+            logging_txt.append('successfully')
+            return ' '.join(logging_txt)
 
 
 logging = LogFormatter()
