@@ -113,7 +113,6 @@ class ListingHandler(BaseHandler):
         if "asin" in self.request.arguments:
             asin = self.get_argument('asin')
             msg = struct_msg(asin)
-            print(msg)
             callback = functools.partial(self.finish_pub, topic=topic, msg=msg)
             self.nsq.pub(topic, msg, callback=callback)
             self.write(msg)
