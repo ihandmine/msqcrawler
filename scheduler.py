@@ -13,7 +13,7 @@ from producer import Publisher
 from utils.misc import get_settings
 from utils.watchdog import start_observer, load_filter_spider
 from spider import FollowRequest
-from utils.log import logging
+from utils import logging
 
 
 logger = logging.get_logger('scheduler')

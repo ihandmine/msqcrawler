@@ -31,3 +31,14 @@ MESSAGE_MODEL = """{"spider": "%(spider)s", "topic": "%(target_topic)s", "url": 
 
 USE_REDIS = False
 REDIS_URL = 'redis://:erpteam_redis@192.168.5.216:6381/15'
+
+MYSQL_ARGS = {
+    'database': 'spider_db',
+    'user': 'cc',
+    'password': 'mysql123',
+    'host': '192.168.5.237',
+    'port': 3306,
+    'charset': 'utf8mb4',
+    # 'max_connections': 8,
+    # 'stale_timeout': 300,
+}

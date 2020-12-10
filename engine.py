@@ -1,8 +1,10 @@
+import asyncio
+
 from utils.misc import load_object, get_settings
 from multihttp.request import Request
 from multihttp.async_request import AsyncRequest
 from multihttp.aio_request import AioRequest
-from utils.log import logging
+from utils import logging
 
 logger = logging.get_logger('engine')
 

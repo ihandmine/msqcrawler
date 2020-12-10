@@ -1,8 +1,9 @@
 import importlib
-from importlib import import_module
+import six
 import pkgutil
 
-import six
+from importlib import import_module
+
 _ITERABLE_SINGLE_VALUES = dict, six.text_type, bytes
 
 
@@ -57,19 +58,20 @@ def create_instance(objcls, settings, crawler, *args, **kwargs):
         return objcls(*args, **kwargs)
 
 
-_class_objects = []
-
-
 def load_all_spider(dirname):
-    for importer, package_name, ispkg in pkgutil.iter_modules([dirname]):
-        if ispkg:
-            load_all_spider(dirname + '/' + package_name)
-        else:
-            module = importer.find_module(package_name)
-            module = module.load_module(package_name)
-            class_name = module.__dir__()[-1]
-            class_object = getattr(module, class_name)
-            _class_objects.append(class_object)
-    return _class_objects
+    _class_objects = {}
 
+    def load_all_spider_inner(dirname):
+        for importer, package_name, ispkg in pkgutil.iter_modules([dirname]):
+            if ispkg:
+                load_all_spider_inner(dirname + '/' + package_name)
+            else:
+                module = importer.find_module(package_name)
+                module = module.load_module(package_name)
+                class_name = module.__dir__()[-1]
+                class_object = getattr(module, class_name)
+                _class_objects[class_object.spider_name] = class_object
+
+    load_all_spider_inner(dirname)
+    return _class_objects.values()
 

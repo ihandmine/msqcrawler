@@ -84,5 +84,3 @@ class LogFormatter(object):
             logging_txt.append('successfully')
             return ' '.join(logging_txt)
 
-
-logging = LogFormatter()
